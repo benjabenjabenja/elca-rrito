@@ -65,7 +65,7 @@ export class CarsController {
         }
     }
 
-    @Patch(':id')
+    @Patch('/update/:id')
     async updateCar(@Param('id', ParseIntPipe) id: number, @Body() updateCarDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
         try {
             const carResponse = await this.carsService.updateCar(id, updateCarDto);
@@ -77,7 +77,7 @@ export class CarsController {
         }
     }
 
-    @Delete(':id')
+    @Delete('/delete/:id')
     async deleteOneCar(@Param('id', ParseIntPipe) id: number): Promise<Car[]> {
         try {
             const carResponse = await this.carsService.deleteOneCar(id);
