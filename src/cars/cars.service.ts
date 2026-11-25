@@ -1,11 +1,12 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 // Interfaces
 import { Car } from '../interfaces/cars.interface.js';
+// DTOs
+import { CreateCarDTO, UpdateCarDTO } from './dto/index.js';
 // Utils
 import { MOCK_CARS_DATA_WITH_ID } from '../utils/mock_data.js';
-// uuid
+// UUID
 import { v4 as uuidv4 } from 'uuid';
-import { CreateCarDTO } from './dto/create-car.dto.js';
 
 @Injectable()
 export class CarsService {
@@ -46,7 +47,7 @@ export class CarsService {
         return newCar;
     }
 
-    async updateCar(id: string, carDto: CreateCarDTO): Promise<Car> {
+    async updateCar(id: string, carDto: UpdateCarDTO): Promise<Car> {
         const car = this.cars.find(car => car.id === id);
 
         if(!car) {
