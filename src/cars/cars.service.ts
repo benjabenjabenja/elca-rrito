@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CarsService {
-    private _cars: Car[] = MOCK_CARS_DATA_WITH_ID;
+    private _cars: Car[] = []; // MOCK_CARS_DATA_WITH_ID
 
     async findAllCars(): Promise<Car[]> {/// mapeo de Car[] a string[] para devolver el nombre de los autos
         /* 

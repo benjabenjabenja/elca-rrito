@@ -16,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class BrandsService {
 
-	private _brands: Brand[] = MOCK_BRANDS_DATA_WITH_ID;
+	private _brands: Brand[] = []; // MOCK_BRANDS_DATA_WITH_ID;
 
 	async create({ name }: CreateBrandDto): Promise<Brand> {
 		const newBrand: Brand = {
