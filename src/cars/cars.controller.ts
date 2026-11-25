@@ -23,7 +23,7 @@ export class CarsController {
 
     @Get(':id')
     findOneById(@Param('id') id: number | string): string {
-        const carId = typeof id === 'string' ? parseInt(id) : id;
+        const carId = typeof id === 'string' ? +id : id;
 
         if(isNaN(carId)) {
             throw new BadRequestException(`Invalid car id: ${id}`);
