@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { 
+    BadRequestException, 
+    Injectable, 
+    InternalServerErrorException, 
+    NotFoundException 
+} from '@nestjs/common';
 // Interfaces
 import { Car } from '../interfaces/cars.interface.js';
 // DTOs
@@ -10,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CarsService {
-    private cars: Car[] = MOCK_CARS_DATA_WITH_ID;
+    private _cars: Car[] = MOCK_CARS_DATA_WITH_ID;
 
     async findAllCars(): Promise<Car[]> {/// mapeo de Car[] a string[] para devolver el nombre de los autos
         /* 
@@ -19,11 +24,11 @@ export class CarsService {
             return carsResponse; 
         */
         
-        return this.cars;
+        return this._cars;
     }
 
     async findOneById(id: string): Promise<Car> {
-        const car = this.cars.find(car => car.id === id);
+        const car = this._cars.find(car => car.id === id);
 
         if(!car) {
             throw new NotFoundException(`Car with id ${id} not found`);
@@ -38,11 +43,11 @@ export class CarsService {
             id: uuidv4()
         }
 
-        if(this.cars.find(car => car.name === newCar.name)) {
+        if(this._cars.find(car => car.name === newCar.name)) {
             throw new BadRequestException(`Car with name ${newCar.name} already exists`);
         }
 
-        this.cars.push(newCar);
+        this._cars.push(newCar);
 
         return newCar;
     }
@@ -70,11 +75,21 @@ export class CarsService {
         
         try {
             const car = await this.findOneById(id);
-            this.cars = this.cars.filter(c => c.id !== car.id); 
+            this._cars = this._cars.filter(c => c.id !== car.id); 
         } catch(error) {
             console.error(error);
             throw new InternalServerErrorException('Error deleting car');
         }
 
+    }
+
+    async seedCars( seedData: Car[] = MOCK_CARS_DATA_WITH_ID): Promise<void> {
+        
+        try {
+            this._cars = seedData;
+        } catch(error) {
+            console.error(error);
+            throw new InternalServerErrorException('Error seeding cars');
+        }
     }
 }
