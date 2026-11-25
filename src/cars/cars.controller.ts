@@ -94,11 +94,10 @@ export class CarsController {
     @Delete('/delete/:id')
     async deleteOneCar(
         @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string
-    ): Promise<Car[]> {
+    ): Promise<void> {
         try {
-            const carResponse = await this.carsService.deleteOneCar(id);
-            console.log(carResponse);
-            return carResponse;
+            await this.carsService.deleteOneCar(id);
+            console.log(`Car with id ${id} deleted successfully`);
         } catch (error) {
             console.error(error);
             throw new InternalServerErrorException('Error deleting car');

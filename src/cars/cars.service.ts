@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 // Interfaces
 import { Car } from '../interfaces/cars.interface.js';
 // DTOs
@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CarsService {
-    private readonly cars: Car[] = MOCK_CARS_DATA_WITH_ID;
+    private cars: Car[] = MOCK_CARS_DATA_WITH_ID;
 
     async findAllCars(): Promise<Car[]> {/// mapeo de Car[] a string[] para devolver el nombre de los autos
         /* 
@@ -48,25 +48,33 @@ export class CarsService {
     }
 
     async updateCar(id: string, carDto: UpdateCarDTO): Promise<Car> {
-        const car = this.cars.find(car => car.id === id);
 
-        if(!car) {
-            throw new NotFoundException(`Car with id ${id} not found`);
+        try {
+            const car = await this.findOneById(id);
+
+            if(carDto.id && carDto.id !== car.id) {
+                throw new BadRequestException(`Car ID: ${id} is not valid`);
+            }
+
+            const updatedCar: Car = { ...car, ...carDto, id };
+            return updatedCar;
+
+        } catch(error) {
+            console.error(error);
+            throw new InternalServerErrorException('Error updating car');
         }
-
-        const updatedCar: Car = { ...car, ...carDto };
-        return updatedCar;
+        
     }
 
-    async deleteOneCar(id: string): Promise<Car[]> {
-        const car = this.cars.find(car => car.id === id);
-
-        if(!car) {
-            throw new NotFoundException(`Car with id ${id} not found`);
+    async deleteOneCar(id: string): Promise<void> {
+        
+        try {
+            const car = await this.findOneById(id);
+            this.cars = this.cars.filter(c => c.id !== car.id); 
+        } catch(error) {
+            console.error(error);
+            throw new InternalServerErrorException('Error deleting car');
         }
 
-        const responseDeletingCar: Car[] = this.cars.filter(car => car.id !== id);
-
-        return responseDeletingCar;
     }
 }
