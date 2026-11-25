@@ -1,10 +1,12 @@
-import { 
-    BadRequestException, 
+import {
     Controller, 
     Get, 
     InternalServerErrorException, 
-    Param 
+    Param, 
+    ParseIntPipe
 } from '@nestjs/common';
+// Interfaces
+import { Car } from '../interfaces/cars.interface.js';
 // Services
 import { CarsService } from './cars.service.js';
 
@@ -15,22 +17,30 @@ export class CarsController {
     ) {}
 
     @Get('/all-cars')
-    findAllCars(): string[] {
-        const carsResponse = this.carsService.findAllCars();
-        console.log(carsResponse);
-        return carsResponse;
+    async findAllCars(): Promise<Car[]> {
+        try {
+            const carsResponse = await this.carsService.findAllCars();
+            console.log(carsResponse);
+            return carsResponse;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException('Error finding all cars');
+        }
     }
 
     @Get(':id')
-    findOneById(@Param('id') id: number | string): string {
-        const carId = typeof id === 'string' ? +id : id;
+    async findOneById(@Param('id', ParseIntPipe) id: number): Promise<Car> {
+        /* // forma tradicional sin pipe
+            const carId = typeof id === 'string' ? +id : id;
 
-        if(isNaN(carId)) {
-            throw new BadRequestException(`Invalid car id: ${id}`);
-        }
+            if(isNaN(carId)) {
+                throw new BadRequestException(`Invalid car id: ${id}`);
+            } 
+        */
+        const carId = id;
 
         try {
-            const carResponse = this.carsService.findOneById(carId as number);
+            const carResponse = await this.carsService.findOneById(carId);
             console.log(carResponse);
             return carResponse;
         } catch (error) {
