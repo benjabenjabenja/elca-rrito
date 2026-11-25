@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { 
+	BadRequestException, 
+	Injectable, 
+	InternalServerErrorException, 
+	NotFoundException 
+} from '@nestjs/common';
 // DTOs
 import { CreateBrandDto, UpdateBrandDto } from './dto/index.js';
 // Entities
@@ -11,7 +16,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class BrandsService {
 
-	private _brands: Brand[] = MOCK_BRANDS_DATA_WITH_ID;
+	private _brands: Brand[] = []; // MOCK_BRANDS_DATA_WITH_ID;
 
 	async create({ name }: CreateBrandDto): Promise<Brand> {
 		const newBrand: Brand = {
@@ -65,5 +70,15 @@ export class BrandsService {
 		}
 
 		this._brands = this._brands.filter(b => b.id !== id);
+	}
+
+	async seedBrands( seedData: Brand[] = MOCK_BRANDS_DATA_WITH_ID): Promise<void> {
+		
+		try {
+			this._brands = seedData;
+		} catch(error) {
+			console.error(error);
+			throw new InternalServerErrorException('Internal Server Error');
+		}
 	}
 }

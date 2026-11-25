@@ -4,6 +4,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { CarsModule } from './cars/cars.module.js';
 import { BrandsModule } from './brands/brands.module.js';
+import { SeedModule } from './seed/seed.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -19,6 +20,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         }), */
         CarsModule,
         BrandsModule,
+        SeedModule,
     ],
     controllers: [AppController],
     providers: [AppService],
