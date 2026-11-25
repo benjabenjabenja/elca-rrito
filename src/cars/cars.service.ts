@@ -8,13 +8,13 @@ import { MOCK_CARS_DATA_WITH_ID } from '../utils/mock_data.js';
 export class CarsService {
     private readonly cars: Car[] = MOCK_CARS_DATA_WITH_ID;
 
-    getAllCars(): string[] {/// mapeo de Car[] a string[] para devolver el nombre de los autos
+    findAllCars(): string[] {/// mapeo de Car[] a string[] para devolver el nombre de los autos
         const carsResponse = this.cars.map(car => car.name);
         console.log(carsResponse);
         return carsResponse;
     }
 
-    findById(id: number): string {
+    findOneById(id: number): string {
         const car = this.cars.find(car => car.id === id);
 
         if(!car) {
