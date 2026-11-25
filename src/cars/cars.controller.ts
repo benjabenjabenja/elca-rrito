@@ -4,8 +4,8 @@ import {
     Delete, 
     Get, 
     InternalServerErrorException, 
-    Param, 
-    ParseIntPipe,
+    Param,
+    ParseUUIDPipe,
     Patch,
     Post
 } from '@nestjs/common';
@@ -13,6 +13,8 @@ import {
 import { Car } from '../interfaces/cars.interface.js';
 // Services
 import { CarsService } from './cars.service.js';
+// utils
+import { UUID_VERSION } from '../utils/const.js';
 
 @Controller('cars')
 export class CarsController {
@@ -33,7 +35,9 @@ export class CarsController {
     }
 
     @Get(':id')
-    async findOneById(@Param('id', ParseIntPipe) id: number): Promise<Car> {
+    async findOneById(
+        @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string
+    ): Promise<Car> {
         /* // forma tradicional sin pipe
             const carId = typeof id === 'string' ? +id : id;
 
@@ -54,7 +58,9 @@ export class CarsController {
     }
 
     @Post('/create')
-    async createOneCar(@Body() createCarDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
+    async createOneCar(
+        @Body() createCarDto: Pick<Car, 'name' | 'brand'>
+    ): Promise<Car> {
         try {
             const carResponse = await this.carsService.createOneCar(createCarDto);
             console.log(carResponse);
@@ -66,7 +72,10 @@ export class CarsController {
     }
 
     @Patch('/update/:id')
-    async updateCar(@Param('id', ParseIntPipe) id: number, @Body() updateCarDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
+    async updateCar(
+        @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string, 
+        @Body() updateCarDto: Pick<Car, 'name' | 'brand'>
+    ): Promise<Car> {
         try {
             const carResponse = await this.carsService.updateCar(id, updateCarDto);
             console.log(carResponse);
@@ -78,7 +87,9 @@ export class CarsController {
     }
 
     @Delete('/delete/:id')
-    async deleteOneCar(@Param('id', ParseIntPipe) id: number): Promise<Car[]> {
+    async deleteOneCar(
+        @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string
+    ): Promise<Car[]> {
         try {
             const carResponse = await this.carsService.deleteOneCar(id);
             console.log(carResponse);

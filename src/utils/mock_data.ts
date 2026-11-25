@@ -1,5 +1,7 @@
 // interfaces
 import { Car } from "../interfaces/cars.interface.js"
+// uuid
+import { v4 as uuidv4 } from 'uuid';
 
 export const MOCK_CARS_DATA: string[] = [
     'Toyota',
@@ -16,15 +18,15 @@ export const MOCK_CARS_DATA: string[] = [
 ]
 
 export const MOCK_CARS_DATA_WITH_ID: Car[] = [
-    { id: 1, name: 'Yaris GR', brand: 'Toyota' },
-    { id: 2, name: 'Focus RS', brand: 'Ford' },
-    { id: 3, name: 'Cruze ST', brand: 'Chevrolet' },
-    { id: 4, name: 'Civic Type R', brand: 'Honda' },
-    { id: 5, name: 'Sentra SR', brand: 'Nissan' },
-    { id: 6, name: 'Elantra N', brand: 'Hyundai' },
-    { id: 7, name: 'Sportage N', brand: 'Kia' },
-    { id: 8, name: 'Golf GTI', brand: 'Volkswagen' },
-    { id: 9, name: 'C-Class AMG', brand: 'Mercedes-Benz' },
-    { id: 10, name: '3 Series M', brand: 'BMW' },
-    { id: 11, name: 'TT RS', brand: 'Audi' },
+    { id: uuidv4(), name: 'Yaris GR', brand: 'Toyota' },
+    { id: uuidv4(), name: 'Focus RS', brand: 'Ford' },
+    { id: uuidv4(), name: 'Cruze ST', brand: 'Chevrolet' },
+    { id: uuidv4(), name: 'Civic Type R', brand: 'Honda' },
+    { id: uuidv4(), name: 'Sentra SR', brand: 'Nissan' },
+    { id: uuidv4(), name: 'Elantra N', brand: 'Hyundai' },
+    { id: uuidv4(), name: 'Sportage N', brand: 'Kia' },
+    { id: uuidv4(), name: 'Golf GTI', brand: 'Volkswagen' },
+    { id: uuidv4(), name: 'C-Class AMG', brand: 'Mercedes-Benz' },
+    { id: uuidv4(), name: '3 Series M', brand: 'BMW' },
+    { id: uuidv4(), name: 'TT RS', brand: 'Audi' },
 ]

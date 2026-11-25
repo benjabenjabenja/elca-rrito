@@ -3,6 +3,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { Car } from '../interfaces/cars.interface.js';
 // Utils
 import { MOCK_CARS_DATA_WITH_ID } from '../utils/mock_data.js';
+// uuid
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class CarsService {
@@ -18,7 +20,7 @@ export class CarsService {
         return this.cars;
     }
 
-    async findOneById(id: number): Promise<Car> {
+    async findOneById(id: string): Promise<Car> {
         const car = this.cars.find(car => car.id === id);
 
         if(!car) {
@@ -31,7 +33,7 @@ export class CarsService {
     async createOneCar(carDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
         const newCar: Car = {
             ...carDto,
-            id: this.cars.length + 1
+            id: uuidv4()
         }
 
         if(this.cars.find(car => car.name === newCar.name)) {
@@ -43,7 +45,7 @@ export class CarsService {
         return newCar;
     }
 
-    async updateCar(id: number, carDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
+    async updateCar(id: string, carDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
         const car = this.cars.find(car => car.id === id);
 
         if(!car) {
@@ -54,7 +56,7 @@ export class CarsService {
         return updatedCar;
     }
 
-    async deleteOneCar(id: number): Promise<Car[]> {
+    async deleteOneCar(id: string): Promise<Car[]> {
         const car = this.cars.find(car => car.id === id);
 
         if(!car) {
@@ -62,7 +64,7 @@ export class CarsService {
         }
 
         const responseDeletingCar: Car[] = this.cars.filter(car => car.id !== id);
-        
+
         return responseDeletingCar;
     }
 }
