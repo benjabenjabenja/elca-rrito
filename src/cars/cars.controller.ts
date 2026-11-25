@@ -15,6 +15,7 @@ import { Car } from '../interfaces/cars.interface.js';
 import { CarsService } from './cars.service.js';
 // utils
 import { UUID_VERSION } from '../utils/const.js';
+import { CreateCarDTO } from './dto/create-car.dto.js';
 
 @Controller('cars')
 export class CarsController {
@@ -59,7 +60,7 @@ export class CarsController {
 
     @Post('/create')
     async createOneCar(
-        @Body() createCarDto: Pick<Car, 'name' | 'brand'>
+        @Body() createCarDto: CreateCarDTO
     ): Promise<Car> {
         try {
             const carResponse = await this.carsService.createOneCar(createCarDto);
@@ -74,7 +75,7 @@ export class CarsController {
     @Patch('/update/:id')
     async updateCar(
         @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string, 
-        @Body() updateCarDto: Pick<Car, 'name' | 'brand'>
+        @Body() updateCarDto: CreateCarDTO
     ): Promise<Car> {
         try {
             const carResponse = await this.carsService.updateCar(id, updateCarDto);

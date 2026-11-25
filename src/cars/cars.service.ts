@@ -5,6 +5,7 @@ import { Car } from '../interfaces/cars.interface.js';
 import { MOCK_CARS_DATA_WITH_ID } from '../utils/mock_data.js';
 // uuid
 import { v4 as uuidv4 } from 'uuid';
+import { CreateCarDTO } from './dto/create-car.dto.js';
 
 @Injectable()
 export class CarsService {
@@ -30,7 +31,7 @@ export class CarsService {
         return car;
     }
 
-    async createOneCar(carDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
+    async createOneCar(carDto: CreateCarDTO): Promise<Car> {
         const newCar: Car = {
             ...carDto,
             id: uuidv4()
@@ -45,7 +46,7 @@ export class CarsService {
         return newCar;
     }
 
-    async updateCar(id: string, carDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
+    async updateCar(id: string, carDto: CreateCarDTO): Promise<Car> {
         const car = this.cars.find(car => car.id === id);
 
         if(!car) {
