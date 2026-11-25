@@ -3,6 +3,7 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { CarsModule } from './cars/cars.module.js';
+import { BrandsModule } from './brands/brands.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -17,6 +18,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
             serviceId: 'elca-rrito',
         }), */
         CarsModule,
+        BrandsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
