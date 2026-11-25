@@ -1,9 +1,13 @@
 import {
+    Body,
     Controller, 
+    Delete, 
     Get, 
     InternalServerErrorException, 
     Param, 
-    ParseIntPipe
+    ParseIntPipe,
+    Patch,
+    Post
 } from '@nestjs/common';
 // Interfaces
 import { Car } from '../interfaces/cars.interface.js';
@@ -46,6 +50,42 @@ export class CarsController {
         } catch (error) {
             console.error(error);
             throw new InternalServerErrorException(`Error finding car with id ${carId}`);
+        }
+    }
+
+    @Post('/create')
+    async createOneCar(@Body() createCarDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
+        try {
+            const carResponse = await this.carsService.createOneCar(createCarDto);
+            console.log(carResponse);
+            return carResponse;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException('Error creating car');
+        }
+    }
+
+    @Patch(':id')
+    async updateCar(@Param('id', ParseIntPipe) id: number, @Body() updateCarDto: Pick<Car, 'name' | 'brand'>): Promise<Car> {
+        try {
+            const carResponse = await this.carsService.updateCar(id, updateCarDto);
+            console.log(carResponse);
+            return carResponse;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException('Error updating car');
+        }
+    }
+
+    @Delete(':id')
+    async deleteOneCar(@Param('id', ParseIntPipe) id: number): Promise<Car[]> {
+        try {
+            const carResponse = await this.carsService.deleteOneCar(id);
+            console.log(carResponse);
+            return carResponse;
+        } catch (error) {
+            console.error(error);
+            throw new InternalServerErrorException('Error deleting car');
         }
     }
 }
