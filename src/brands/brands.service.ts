@@ -1,26 +1,67 @@
-import { Injectable } from '@nestjs/common';
-import { CreateBrandDto } from './dto/create-brand.dto.js';
-import { UpdateBrandDto } from './dto/update-brand.dto.js';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+// DTOs
+import { CreateBrandDto, UpdateBrandDto } from './dto/index.js';
+// Entities
+import { Brand } from './entities/brand.entity.js';
+// Utils
+import { MOCK_BRANDS_DATA_WITH_ID } from '../utils/mockData.js';
+// UUUID
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class BrandsService {
-	create(createBrandDto: CreateBrandDto) {
-		return 'This action adds a new brand';
+
+	private _brands: Brand[] = MOCK_BRANDS_DATA_WITH_ID;
+
+	async create({ name }: CreateBrandDto): Promise<Brand> {
+		const newBrand: Brand = {
+			id: uuidv4(),
+			name,
+			createAt: new Date().toISOString(),
+			updatedAt: null
+		}
+
+		if(this._brands.find(brand => brand.name === name)) {
+			throw new BadRequestException(`Brand with name ${name} already exists`);
+		}
+
+		this._brands.push(newBrand);
+
+		return newBrand;
 	}
 
-	findAll() {
-		return `This action returns all brands`;
+	async findAll(): Promise<Brand[]> {
+		return this._brands;
 	}
 
-	findOne(id: string) {
-		return `This action returns a #${id} brand`;
+	async findOne(id: string): Promise<Brand> {
+		const brand = this._brands.find(b => b.id === id);
+
+		if(!brand){
+			throw new NotFoundException(`Brand with id: ${id} not found`);
+		}
+
+		return brand;
 	}
 
-	update(id: string, updateBrandDto: UpdateBrandDto) {
-		return `This action updates a #${id} brand`;
+	async update(id: string, updateBrandDto: UpdateBrandDto): Promise<Brand> {
+		const brand = await this.findOne(id);
+
+		if(updateBrandDto.id && updateBrandDto.id !== brand.id) {
+			throw new BadRequestException(`Brand ID: ${id} is not valid`);
+		}
+
+		const updatedBrand: Brand = { ...brand, ...updateBrandDto, id };
+		return updatedBrand;
 	}
 
-	remove(id: string) {
-		return `This action removes a #${id} brand`;
+	async delete(id: string): Promise<void> {
+		const brand = await this.findOne(id);
+
+		if(!brand){
+			throw new NotFoundException(`Brand with id: ${id} not found`);
+		}
+
+		this._brands = this._brands.filter(b => b.id !== id);
 	}
 }

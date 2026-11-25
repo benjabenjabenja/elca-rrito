@@ -4,7 +4,7 @@ import { Car } from '../interfaces/cars.interface.js';
 // DTOs
 import { CreateCarDTO, UpdateCarDTO } from './dto/index.js';
 // Utils
-import { MOCK_CARS_DATA_WITH_ID } from '../utils/mock_data.js';
+import { MOCK_CARS_DATA_WITH_ID } from '../utils/mockData.js';
 // UUID
 import { v4 as uuidv4 } from 'uuid';
 
