@@ -51,7 +51,9 @@ export class BrandsService {
 			throw new BadRequestException(`Brand ID: ${id} is not valid`);
 		}
 
-		const updatedBrand: Brand = { ...brand, ...updateBrandDto, id };
+		const updatedBrand: Brand = { ...brand, ...updateBrandDto, id, updatedAt: new Date().toISOString() };
+		this._brands = this._brands.map(b => b.id === id ? updatedBrand : b);
+		
 		return updatedBrand;
 	}
 
